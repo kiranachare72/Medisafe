@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In – MediSafe Healthcare</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">⚕️</span>
+        <span>MediSafe</span>
+      </a>
+      <div class="nav-actions">
+        <span style="font-size: 14px; color: var(--text-muted);">Don't have an account?</span>
+        <a href="register.html" class="btn btn-outline btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Sign In to MediSafe</h2>
+        <p>Access your health dashboard, medicines, and records</p>
+      </div>
+
+      <!-- Alert Message Box -->
+      <div id="loginAlert" class="form-alert"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="e.g. name@example.com" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password <span class="required">*</span></label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width: 100%; margin-top: 12px;">
+          Sign In
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="register.html">Create an account here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Redirect if already logged in
+      redirectIfAuthenticated();
+
+      const form = document.getElementById('loginForm');
+      const alertBox = document.getElementById('loginAlert');
+      const submitBtn = document.getElementById('loginSubmitBtn');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.style.display = 'none';
+        alertBox.className = 'form-alert';
+
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+          showAlert('Please provide both email and password.', 'error');
+          return;
+        }
+
+        setButtonLoading(submitBtn, true, 'Sign In');
+
+        const res = await apiFetch('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+
+        setButtonLoading(submitBtn, false, 'Sign In');
+
+        if (res.success) {
+          setToken(res.token);
+          setUser(res.user);
+          showAlert('Login successful! Redirecting to dashboard...', 'success');
+          showToast('Welcome back!', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
+        } else {
+          showAlert(res.message || 'Invalid email or password.', 'error');
+        }
+      });
+
+      function showAlert(msg, type) {
+        alertBox.textContent = msg;
+        alertBox.className = `form-alert alert-${type}`;
+        alertBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

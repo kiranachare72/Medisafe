@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Tracker – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header"><a href="dashboard.html" class="sidebar-brand"><span style="font-size: 24px;">⚕️</span><span>MediSafe</span></a></div>
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link active"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info"><div class="user-name current-user-name">User</div><div class="user-email current-user-email">...</div></div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title"><h2>Daily Hydration Tracker</h2></div>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-outline btn-sm" onclick="openGoalModal()">🎯 Set Daily Goal</button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Main Hydration Card -->
+        <div class="card" style="margin-bottom: 24px; text-align: center; padding: 36px 24px;">
+          <div style="font-size: 52px; margin-bottom: 12px;">💧</div>
+          <h1 style="color: var(--secondary); font-size: 2.8rem; margin-bottom: 4px;" id="waterCurrent">0 ml</h1>
+          <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 20px;">Daily Target: <strong id="waterGoal" style="color: var(--text-main);">2500 ml</strong> (<span id="waterPercent">0%</span>)</p>
+
+          <div class="progress-bar-container" style="height: 16px; max-width: 500px; margin: 0 auto 30px;">
+            <div id="waterBarFill" class="progress-fill" style="width: 0%;"></div>
+          </div>
+
+          <!-- Quick Intake Buttons -->
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="logWater(250)">+ 250 ml (Cup)</button>
+            <button class="btn btn-primary" onclick="logWater(500)">+ 500 ml (Bottle)</button>
+            <button class="btn btn-outline" onclick="logWater(750)">+ 750 ml</button>
+            <button class="btn btn-outline" onclick="logWater(1000)">+ 1000 ml (Liter)</button>
+          </div>
+        </div>
+
+        <!-- Custom Intake & Today's Logs -->
+        <div class="dashboard-sections">
+          <!-- Today's Intake Entries -->
+          <div class="card">
+            <h3 style="margin-bottom: 16px;">Today's Water Entries</h3>
+            <div id="todayEntriesContainer">
+              <div class="empty-state">
+                <div class="spinner spinner-primary"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Log Form -->
+          <div class="card">
+            <h3 style="margin-bottom: 16px;">Log Custom Amount</h3>
+            <form id="customWaterForm">
+              <div class="form-group">
+                <label class="form-label">Water Amount (in ml)</label>
+                <input type="number" id="customWaterAmount" class="form-control" placeholder="e.g. 350" min="10" max="3000" required>
+              </div>
+              <button type="submit" class="btn btn-secondary" style="width: 100%;">+ Log Custom Water</button>
+            </form>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+            <h4 style="margin-bottom: 12px; font-size: 14px;">Past 7 Days Summary</h4>
+            <div id="waterHistoryCards"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Set Daily Goal Modal -->
+  <div id="goalModal" class="modal-overlay">
+    <div class="modal" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3>Adjust Daily Water Goal</h3>
+        <button class="modal-close" onclick="closeGoalModal()">&times;</button>
+      </div>
+      <form id="goalForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Daily Target (in ml)</label>
+            <input type="number" id="newGoalInput" class="form-control" placeholder="e.g. 2500" min="500" max="10000" required>
+            <span class="form-hint">Standard recommended adult intake is 2000 ml – 3000 ml.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeGoalModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/water.js"></script>
+</body>
+</html>

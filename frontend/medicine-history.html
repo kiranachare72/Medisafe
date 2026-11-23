@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medicine History – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header"><a href="dashboard.html" class="sidebar-brand"><span style="font-size: 24px;">⚕️</span><span>MediSafe</span></a></div>
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link active"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info"><div class="user-name current-user-name">User</div><div class="user-email current-user-email">...</div></div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title"><h2>Medication Intake Compliance History</h2></div>
+        </div>
+        <div class="topbar-right">
+          <a href="medicines.html" class="btn btn-outline btn-sm">Manage Medicines</a>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Date Filter Card -->
+        <div class="card" style="margin-bottom: 24px; padding: 18px 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Filter Daily Compliance</h3>
+              <p style="font-size: 13px;">View medication logs by specific scheduled date</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <label for="historyDateInput" style="font-weight: 600; font-size: 13px;">Date:</label>
+              <input type="date" id="historyDateInput" class="form-control" style="width: auto;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance Quick Stats -->
+        <div id="historyStatsContainer" class="stats-grid" style="margin-bottom: 24px;"></div>
+
+        <!-- History Table Card -->
+        <div class="card">
+          <div id="historyLogsContainer">
+            <div class="empty-state">
+              <div class="spinner spinner-primary"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/medicine-history.js"></script>
+</body>
+</html>

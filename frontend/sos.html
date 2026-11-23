@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency SOS – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header"><a href="dashboard.html" class="sidebar-brand"><span style="font-size: 24px;">⚕️</span><span>MediSafe</span></a></div>
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link active"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info"><div class="user-name current-user-name">User</div><div class="user-email current-user-email">...</div></div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title"><h2>Emergency SOS & Immediate Assistance</h2></div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <div style="max-width: 800px; margin: 0 auto;">
+
+          <!-- SOS Banner -->
+          <div class="card" style="border: 2px solid var(--danger); background: #fff5f5; text-align: center; margin-bottom: 24px; padding: 32px 24px;">
+            <div style="font-size: 48px; margin-bottom: 8px;">🚨</div>
+            <h1 style="color: #991b1b; font-size: 2.2rem; margin-bottom: 8px;">Emergency SOS Assistance</h1>
+            <p style="color: #7f1d1d; font-size: 15px; max-width: 600px; margin: 0 auto 24px;">
+              Request your GPS position below to generate an exact Google Maps location link. Call your emergency contacts directly with one tap.
+            </p>
+
+            <button id="getLocationBtn" class="btn btn-danger btn-lg" style="font-size: 16px; padding: 14px 32px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);">
+              📍 Acquire My GPS Location
+            </button>
+            <div id="locationStatus" style="font-size: 13px; color: #991b1b; margin-top: 12px; font-weight: 500;"></div>
+          </div>
+
+          <!-- Location Result Card -->
+          <div id="locationResultCard" class="card" style="display: none; margin-bottom: 24px; border-left: 4px solid var(--success);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="color: var(--success); font-size: 1.2rem;">📍 Current GPS Location Acquired</h3>
+              <span class="badge badge-success">GPS Active</span>
+            </div>
+
+            <div style="background: var(--bg-main); padding: 16px; border-radius: var(--radius-md); margin-bottom: 18px;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; font-size: 14px;">
+                <div><span>Latitude:</span> <strong id="latValue">-</strong></div>
+                <div><span>Longitude:</span> <strong id="lngValue">-</strong></div>
+                <div><span>Accuracy:</span> <strong id="accuracyValue">-</strong></div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <a id="googleMapsLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 1; text-align: center;">
+                🗺️ Open in Google Maps
+              </a>
+              <button id="copyLocationBtn" class="btn btn-outline" style="flex: 1;">
+                📋 Copy SOS Location Link
+              </button>
+            </div>
+          </div>
+
+          <!-- Emergency Contacts Quick Dial -->
+          <div class="card">
+            <h3 style="margin-bottom: 16px; color: var(--text-main);">One-Tap Emergency Contacts</h3>
+            <div id="sosContactsList">
+              <div class="empty-state">
+                <div class="spinner spinner-primary"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/sos.js"></script>
+</body>
+</html>

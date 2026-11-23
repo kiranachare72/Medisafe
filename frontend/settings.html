@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-brand">
+          <span style="font-size: 24px;">⚕️</span>
+          <span>MediSafe</span>
+        </a>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link active"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info">
+            <div class="user-name current-user-name">Loading...</div>
+            <div class="user-email current-user-email">...</div>
+          </div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title">
+            <h2>Account Settings</h2>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <div style="max-width: 700px; margin: 0 auto;">
+          <div class="card" style="margin-bottom: 24px;">
+            <h3>System Status</h3>
+            <p style="margin: 8px 0 16px;">Current platform environment information for your research project.</p>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
+              <li style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-color);">
+                <span>Backend Framework:</span> <strong>Python Django 6.x</strong>
+              </li>
+              <li style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-color);">
+                <span>Database:</span> <strong>MongoDB Atlas (PyMongo)</strong>
+              </li>
+              <li style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-color);">
+                <span>Authentication:</span> <strong>PyJWT + bcrypt</strong>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-color: #fecaca; background: #fff5f5;">
+            <h3 style="color: var(--danger);">Session Management</h3>
+            <p style="margin: 8px 0 16px; color: #991b1b;">Signing out will clear your session and active authentication tokens from this browser.</p>
+            <button class="btn btn-danger logout-btn">Sign Out of MediSafe</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About MediSafe – BSc IT Healthcare Research Project</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">⚕️</span>
+        <span>MediSafe</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About Project</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding: 50px 20px;">
+    <div class="card" style="margin-bottom: 30px;">
+      <span class="badge badge-info" style="margin-bottom: 12px;">Research Project Information</span>
+      <h1 style="margin-bottom: 16px;">MediSafe: Integrated Patient Care & Medication System</h1>
+      <p style="font-size: 16px; margin-bottom: 20px;">
+        MediSafe is a real-world, full-stack healthcare web application engineered for a final-year BSc Information Technology research project. 
+        It solves critical gaps in patient adherence, medical document centralization, and caregiver coordination.
+      </p>
+
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+      <h3 style="margin-bottom: 12px;">Architecture & Technology Stack</h3>
+      <ul style="padding-left: 20px; line-height: 1.8; color: var(--text-muted); margin-bottom: 24px;">
+        <li><strong>Frontend:</strong> Pure HTML5, CSS3, Vanilla JavaScript (ES6+), Fetch API. Responsive for desktop, tablet, and mobile browsers.</li>
+        <li><strong>Backend:</strong> Python 3.x, Django 6.x, Django REST Framework.</li>
+        <li><strong>Database:</strong> MongoDB Atlas Cloud NoSQL database, interfaced via <code>pymongo</code> for native document persistence.</li>
+        <li><strong>Authentication:</strong> <code>bcrypt</code> one-way salted hashing, <code>PyJWT</code> stateless token authorization with per-request verification.</li>
+        <li><strong>OCR Engine:</strong> Tesseract OCR with PIL/Pillow preprocessing for optical text recognition from prescription images.</li>
+        <li><strong>Emergency Geolocation:</strong> HTML5 Geolocation API with real-time coordinate translation to Google Maps links.</li>
+      </ul>
+
+      <h3 style="margin-bottom: 12px;">Key Research Objectives</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+        <div style="background: var(--bg-main); padding: 18px; border-radius: var(--radius-md);">
+          <strong>1. Medication Adherence</strong>
+          <p style="font-size: 13px; margin-top: 6px;">Mitigating missed dosage incidents through active scheduling and historical log verification.</p>
+        </div>
+        <div style="background: var(--bg-main); padding: 18px; border-radius: var(--radius-md);">
+          <strong>2. Document Integrity</strong>
+          <p style="font-size: 13px; margin-top: 6px;">Encrypted, owner-verified medical records storage avoiding file exposure.</p>
+        </div>
+        <div style="background: var(--bg-main); padding: 18px; border-radius: var(--radius-md);">
+          <strong>3. Caregiver Access Control</strong>
+          <p style="font-size: 13px; margin-top: 6px;">Granular token-based permissions for family members and caretakers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 MediSafe – BSc IT Healthcare Management System.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

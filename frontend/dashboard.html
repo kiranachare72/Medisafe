@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-brand">
+          <span style="font-size: 24px;">⚕️</span>
+          <span>MediSafe</span>
+        </a>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link active">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="medicines.html" class="nav-link">
+            <span class="nav-icon">💊</span>
+            <span>Medicines</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="medicine-history.html" class="nav-link">
+            <span class="nav-icon">📜</span>
+            <span>Medicine History</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="appointments.html" class="nav-link">
+            <span class="nav-icon">🩺</span>
+            <span>Appointments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="water-tracker.html" class="nav-link">
+            <span class="nav-icon">💧</span>
+            <span>Water Tracker</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="medical-records.html" class="nav-link">
+            <span class="nav-icon">📁</span>
+            <span>Medical Records</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="prescription-scanner.html" class="nav-link">
+            <span class="nav-icon">🔬</span>
+            <span>Prescription Scanner</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="health-assessment.html" class="nav-link">
+            <span class="nav-icon">❤️</span>
+            <span>Health Risk Check</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="emergency-contacts.html" class="nav-link">
+            <span class="nav-icon">📞</span>
+            <span>Emergency Contacts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="sos.html" class="nav-link">
+            <span class="nav-icon">🚨</span>
+            <span style="color: var(--danger); font-weight: 700;">SOS Emergency</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="caregiver.html" class="nav-link">
+            <span class="nav-icon">👥</span>
+            <span>Caregivers</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="profile.html" class="nav-link">
+            <span class="nav-icon">👤</span>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="settings.html" class="nav-link">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Sidebar User Footer -->
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info">
+            <div class="user-name current-user-name">Loading...</div>
+            <div class="user-email current-user-email">...</div>
+          </div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title">
+            <h2 id="userGreeting">Dashboard</h2>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <a href="medicines.html" class="btn btn-primary btn-sm">+ Add Medicine</a>
+          <a href="appointments.html" class="btn btn-outline btn-sm">+ Appointment</a>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="dashboard-content">
+
+        <!-- Stats Cards Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue">💊</div>
+            <div class="stat-info">
+              <div class="stat-title">Active Medications</div>
+              <div class="stat-value" id="statActiveMedicines">0</div>
+              <div class="stat-desc">Currently prescribed</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div class="stat-info">
+              <div class="stat-title">Taken Today</div>
+              <div class="stat-value" id="statTakenMedicines">0</div>
+              <div class="stat-desc">Doses recorded</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon orange">⚠️</div>
+            <div class="stat-info">
+              <div class="stat-title">Missed Today</div>
+              <div class="stat-value" id="statMissedMedicines">0</div>
+              <div class="stat-desc">Doses pending/missed</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon teal">💧</div>
+            <div class="stat-info">
+              <div class="stat-title">Hydration Today</div>
+              <div class="stat-value" id="waterCurrentAmount">0 ml</div>
+              <div class="stat-desc">Target: <span id="waterGoalAmount">2500 ml</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Section -->
+        <div class="dashboard-sections">
+
+          <!-- Left Column -->
+          <div>
+            <!-- Today's Schedule Card -->
+            <div class="card" style="margin-bottom: 24px;">
+              <div class="section-header">
+                <h3 class="section-title">Today's Medication Schedule</h3>
+                <a href="medicines.html" class="btn btn-outline btn-sm">Manage All</a>
+              </div>
+              <div id="todayMedicinesContainer">
+                <div class="empty-state">
+                  <div class="spinner spinner-primary"></div>
+                  <p style="margin-top: 10px;">Loading medication schedule...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Next Appointment Card -->
+            <div class="card">
+              <div class="section-header">
+                <h3 class="section-title">Upcoming Doctor Appointment</h3>
+                <a href="appointments.html" class="btn btn-outline btn-sm">View Schedule</a>
+              </div>
+              <div id="nextAppointmentContainer">
+                <div class="empty-state">
+                  <div class="spinner spinner-primary"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div>
+            <!-- Hydration Card -->
+            <div class="card" style="margin-bottom: 24px;">
+              <div class="section-header">
+                <h3 class="section-title">Water Progress</h3>
+                <a href="water-tracker.html" class="btn btn-outline btn-sm">Log Water</a>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                  <span>Daily Goal Progress</span>
+                  <span id="waterPercentage">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div id="waterProgressFill" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <p style="font-size: 12px; margin-top: 8px;">Keep hydrated throughout the day to support kidney function and well-being.</p>
+              </div>
+            </div>
+
+            <!-- Recent Records Card -->
+            <div class="card" style="margin-bottom: 24px;">
+              <div class="section-header">
+                <h3 class="section-title">Recent Medical Records</h3>
+                <a href="medical-records.html" class="btn btn-outline btn-sm">All Records</a>
+              </div>
+              <div id="recentRecordsContainer">
+                <div class="empty-state">
+                  <div class="spinner spinner-primary"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emergency Contacts Card -->
+            <div class="card">
+              <div class="section-header">
+                <h3 class="section-title" style="color: var(--danger);">Emergency Contacts</h3>
+                <a href="emergency-contacts.html" class="btn btn-outline btn-sm">Manage</a>
+              </div>
+              <div id="emergencyContactsContainer">
+                <div class="empty-state">
+                  <div class="spinner spinner-primary"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

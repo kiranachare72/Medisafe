@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediSafe – Smart Healthcare Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+      background: linear-gradient(180deg, #e8f1fd 0%, #f8fafc 100%);
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      color: var(--primary-dark);
+      margin-bottom: 18px;
+      font-weight: 800;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      max-width: 680px;
+      margin: 0 auto 32px;
+      color: var(--text-muted);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin: 60px 0;
+    }
+    .feature-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .cta-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: #fff;
+      padding: 50px 30px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      margin: 60px 0;
+    }
+    .cta-banner h2 {
+      color: #fff;
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .cta-banner p {
+      color: #e0f2fe;
+      margin-bottom: 24px;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">⚕️</span>
+        <span>MediSafe</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About Project</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <span class="badge badge-info" style="margin-bottom: 16px;">BSc IT Research Project</span>
+      <h1>Intelligent Healthcare & Medication Management</h1>
+      <p>
+        MediSafe empowers patients, doctors, and caregivers with real-time medication tracking,
+        appointment scheduling, hydration monitoring, health risk assessments, and prescription OCR.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+        <a href="register.html" class="btn btn-primary btn-lg">Create Free Account</a>
+        <a href="about.html" class="btn btn-outline btn-lg">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="container">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💊</div>
+        <h3>Medication Schedule</h3>
+        <p>Comprehensive medicine intake tracking with dosage logs, adherence history, and timely reminder states.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Doctor Appointments</h3>
+        <p>Never miss a consultation. Organize and view upcoming clinical checkups with doctors and hospitals.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💧</div>
+        <h3>Hydration Tracker</h3>
+        <p>Log your daily water intake with visual progress bars and custom daily hydration targets.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <h3>Medical Records</h3>
+        <p>Securely store blood tests, radiological reports, and medical certificates with user data isolation.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <h3>Prescription OCR</h3>
+        <p>Upload handwritten or printed prescriptions to extract medication names and dosage details via OCR.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🚨</div>
+        <h3>Emergency SOS</h3>
+        <p>Instant location retrieval with GPS coordinates and one-tap emergency calling to designated contacts.</p>
+      </div>
+    </div>
+
+    <!-- CTA Banner -->
+    <div class="cta-banner">
+      <h2>Take Control of Your Health Today</h2>
+      <p>Simple, reliable, and secure health records stored with MongoDB Atlas and Python Django.</p>
+      <a href="register.html" class="btn btn-light btn-lg" style="background:#fff; color:var(--primary); font-weight:700;">Start Managing Health</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 MediSafe – BSc IT Healthcare Management System. Built with Django & MongoDB Atlas.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

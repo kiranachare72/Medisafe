@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointments – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header"><a href="dashboard.html" class="sidebar-brand"><span style="font-size: 24px;">⚕️</span><span>MediSafe</span></a></div>
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link active"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info"><div class="user-name current-user-name">User</div><div class="user-email current-user-email">...</div></div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title"><h2>Doctor Appointments</h2></div>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="openAddAppointmentModal()">+ Book Appointment</button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <div id="appointmentsListContainer">
+          <div class="empty-state">
+            <div class="spinner spinner-primary"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Book / Edit Appointment Modal -->
+  <div id="appointmentModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="apptModalTitle">Book Doctor Appointment</h3>
+        <button class="modal-close" onclick="closeAppointmentModal()">&times;</button>
+      </div>
+      <form id="appointmentForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Doctor Name <span class="required">*</span></label>
+            <input type="text" id="apptDoctor" class="form-control" placeholder="e.g. Dr. Rajesh Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Hospital / Clinic</label>
+            <input type="text" id="apptHospital" class="form-control" placeholder="e.g. Apollo Hospital / City Clinic">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Appointment Date <span class="required">*</span></label>
+              <input type="date" id="apptDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time <span class="required">*</span></label>
+              <input type="time" id="apptTime" class="form-control" value="10:00" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Consultation Purpose</label>
+            <input type="text" id="apptPurpose" class="form-control" placeholder="e.g. Routine Health Checkup, Cardiology Followup">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Notes / Instructions</label>
+            <textarea id="apptNotes" class="form-control" rows="2" placeholder="e.g. Bring fasting blood reports, room 302"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeAppointmentModal()">Cancel</button>
+          <button type="submit" id="saveApptBtn" class="btn btn-primary">Confirm Appointment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/appointments.js"></script>
+</body>
+</html>

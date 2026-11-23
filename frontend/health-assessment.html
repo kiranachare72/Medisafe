@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Risk Assessment – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header"><a href="dashboard.html" class="sidebar-brand"><span style="font-size: 24px;">⚕️</span><span>MediSafe</span></a></div>
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link active"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info"><div class="user-name current-user-name">User</div><div class="user-email current-user-email">...</div></div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title"><h2>Health Risk & Vitals Assessment</h2></div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <div style="max-width: 850px; margin: 0 auto;">
+
+          <!-- Medical Disclaimer Alert -->
+          <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: var(--radius-md); margin-bottom: 24px; font-size: 14px; color: #1e3a8a;">
+            <strong>Medical Disclaimer:</strong> This assessment is for informational purposes only and is not a medical diagnosis. Please consult a qualified healthcare professional.
+          </div>
+
+          <!-- Assessment Vitals Input Form -->
+          <div class="card" style="margin-bottom: 24px;">
+            <h3 style="margin-bottom: 20px;">Enter Your Health Vitals</h3>
+            <form id="assessmentForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Age (Years) <span class="required">*</span></label>
+                  <input type="number" id="assessAge" class="form-control" placeholder="e.g. 25" min="1" max="120" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Height (cm) <span class="required">*</span></label>
+                  <input type="number" id="assessHeight" step="0.1" class="form-control" placeholder="e.g. 175" min="50" max="250" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Weight (kg) <span class="required">*</span></label>
+                  <input type="number" id="assessWeight" step="0.1" class="form-control" placeholder="e.g. 70" min="15" max="300" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Random / Fasting Blood Sugar (mg/dL)</label>
+                  <input type="number" id="assessSugar" step="0.1" class="form-control" placeholder="e.g. 100">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Systolic Blood Pressure (Upper, mmHg)</label>
+                  <input type="number" id="assessSystolic" class="form-control" placeholder="e.g. 120">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Diastolic Blood Pressure (Lower, mmHg)</label>
+                  <input type="number" id="assessDiastolic" class="form-control" placeholder="e.g. 80">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Current Symptoms or Discomfort</label>
+                <input type="text" id="assessSymptoms" class="form-control" placeholder="e.g. Mild headache, fatigue after exercise, normal">
+              </div>
+
+              <button type="submit" id="submitAssessBtn" class="btn btn-primary" style="width: 100%;">
+                Calculate BMI & Evaluate Health Vitals
+              </button>
+            </form>
+          </div>
+
+          <!-- Calculated Report Card -->
+          <div id="currentResultCard" class="card" style="display: none; margin-bottom: 24px; border: 2px solid var(--primary);">
+            <div class="section-header">
+              <h3 style="color: var(--primary);">Your Assessment Report</h3>
+              <span class="badge badge-info">Rule-Based Clinical Reference</span>
+            </div>
+
+            <!-- BMI Summary Row -->
+            <div style="background: var(--bg-main); padding: 20px; border-radius: var(--radius-md); text-align: center; margin-bottom: 20px;">
+              <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Body Mass Index (BMI)</span>
+              <div style="font-size: 3rem; font-weight: 800; color: var(--primary); margin: 4px 0;" id="resultBmi">-</div>
+              <div><span id="resultBmiCategory" class="badge badge-success">-</span></div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                BMI Formula: Weight (kg) / [Height (m)]² &bull; Standard Range: 18.5 – 24.9
+              </p>
+            </div>
+
+            <!-- Vitals Classifications Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px;">
+              <div style="background: var(--bg-main); padding: 14px; border-radius: var(--radius-md);">
+                <div style="font-size: 12px; color: var(--text-muted);">Blood Pressure</div>
+                <div id="resultBpCategory" style="font-weight: 700; margin: 4px 0;">-</div>
+                <span id="resultBpBadge" class="badge badge-info">Evaluation</span>
+              </div>
+              <div style="background: var(--bg-main); padding: 14px; border-radius: var(--radius-md);">
+                <div style="font-size: 12px; color: var(--text-muted);">Blood Sugar Indicator</div>
+                <div id="resultGlucoseCategory" style="font-weight: 700; margin: 4px 0;">-</div>
+                <span id="resultGlucoseBadge" class="badge badge-info">Evaluation</span>
+              </div>
+            </div>
+
+            <!-- Assessment Factors & Observations -->
+            <div style="margin-bottom: 16px;">
+              <h4 style="margin-bottom: 8px;">Clinical Factors & Insights</h4>
+              <ul id="resultFactorsList" style="padding-left: 20px; font-size: 14px; color: var(--text-main); line-height: 1.7;"></ul>
+            </div>
+          </div>
+
+          <!-- Past Assessments History -->
+          <div class="card">
+            <h3 style="margin-bottom: 16px;">Past Assessment History</h3>
+            <div id="assessmentsHistoryContainer">
+              <div class="empty-state">
+                <div class="spinner spinner-primary"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/health.js"></script>
+</body>
+</html>

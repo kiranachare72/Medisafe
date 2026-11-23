@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-brand">
+          <span style="font-size: 24px;">⚕️</span>
+          <span>MediSafe</span>
+        </a>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="medicines.html" class="nav-link">
+            <span class="nav-icon">💊</span>
+            <span>Medicines</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="medicine-history.html" class="nav-link">
+            <span class="nav-icon">📜</span>
+            <span>Medicine History</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="appointments.html" class="nav-link">
+            <span class="nav-icon">🩺</span>
+            <span>Appointments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="water-tracker.html" class="nav-link">
+            <span class="nav-icon">💧</span>
+            <span>Water Tracker</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="medical-records.html" class="nav-link">
+            <span class="nav-icon">📁</span>
+            <span>Medical Records</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="prescription-scanner.html" class="nav-link">
+            <span class="nav-icon">🔬</span>
+            <span>Prescription Scanner</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="health-assessment.html" class="nav-link">
+            <span class="nav-icon">❤️</span>
+            <span>Health Risk Check</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="emergency-contacts.html" class="nav-link">
+            <span class="nav-icon">📞</span>
+            <span>Emergency Contacts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="sos.html" class="nav-link">
+            <span class="nav-icon">🚨</span>
+            <span style="color: var(--danger); font-weight: 700;">SOS Emergency</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="caregiver.html" class="nav-link">
+            <span class="nav-icon">👥</span>
+            <span>Caregivers</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="profile.html" class="nav-link active">
+            <span class="nav-icon">👤</span>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="settings.html" class="nav-link">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- User footer -->
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info">
+            <div class="user-name current-user-name">Loading...</div>
+            <div class="user-email current-user-email">...</div>
+          </div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title">
+            <h2>User Profile & Health Details</h2>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <div style="max-width: 800px; margin: 0 auto;">
+
+          <!-- Profile Photo Card -->
+          <div class="card" style="margin-bottom: 24px; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+              <div id="photoPreview" style="width: 100px; height: 100px; border-radius: 50%; background-color: var(--primary-light); display: flex; align-items: center; justify-content: center; border: 3px solid var(--primary); overflow: hidden;">
+                <span style="font-size: 32px; font-weight: 700; color: var(--primary);">U</span>
+              </div>
+              <div>
+                <label for="profilePhotoInput" class="btn btn-outline btn-sm" style="cursor: pointer;">
+                  📷 Change Profile Photo
+                </label>
+                <input type="file" id="profilePhotoInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+                <p style="font-size: 12px; margin-top: 6px; color: var(--text-muted);">Allowed formats: JPG, PNG, WEBP (Max 5 MB)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Profile Form Card -->
+          <div class="card">
+            <h3 style="margin-bottom: 20px;">Personal & Health Information</h3>
+
+            <form id="profileForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="nameInput">Full Name <span class="required">*</span></label>
+                  <input type="text" id="nameInput" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="emailInput">Email Address</label>
+                  <input type="email" id="emailInput" class="form-control" disabled style="background-color: var(--bg-main); cursor: not-allowed;">
+                  <span class="form-hint">Email is linked to your account and cannot be changed.</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="phoneInput">Phone Number</label>
+                  <input type="tel" id="phoneInput" class="form-control" placeholder="+91 9876543210">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="ageInput">Age (Years)</label>
+                  <input type="number" id="ageInput" class="form-control" placeholder="e.g. 24" min="1" max="120">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="genderInput">Gender</label>
+                  <select id="genderInput" class="form-control">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="bloodGroupInput">Blood Group</label>
+                  <select id="bloodGroupInput" class="form-control">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="heightInput">Height (cm)</label>
+                  <input type="number" id="heightInput" step="0.1" class="form-control" placeholder="e.g. 175">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="weightInput">Weight (kg)</label>
+                  <input type="number" id="weightInput" step="0.1" class="form-control" placeholder="e.g. 70">
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                <button type="submit" id="saveProfileBtn" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

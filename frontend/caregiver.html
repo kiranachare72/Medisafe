@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caregivers – MediSafe Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header"><a href="dashboard.html" class="sidebar-brand"><span style="font-size: 24px;">⚕️</span><span>MediSafe</span></a></div>
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><span class="nav-icon">📊</span><span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="medicines.html" class="nav-link"><span class="nav-icon">💊</span><span>Medicines</span></a></li>
+        <li class="nav-item"><a href="medicine-history.html" class="nav-link"><span class="nav-icon">📜</span><span>Medicine History</span></a></li>
+        <li class="nav-item"><a href="appointments.html" class="nav-link"><span class="nav-icon">🩺</span><span>Appointments</span></a></li>
+        <li class="nav-item"><a href="water-tracker.html" class="nav-link"><span class="nav-icon">💧</span><span>Water Tracker</span></a></li>
+        <li class="nav-item"><a href="medical-records.html" class="nav-link"><span class="nav-icon">📁</span><span>Medical Records</span></a></li>
+        <li class="nav-item"><a href="prescription-scanner.html" class="nav-link"><span class="nav-icon">🔬</span><span>Prescription Scanner</span></a></li>
+        <li class="nav-item"><a href="health-assessment.html" class="nav-link"><span class="nav-icon">❤️</span><span>Health Risk Check</span></a></li>
+        <li class="nav-item"><a href="emergency-contacts.html" class="nav-link"><span class="nav-icon">📞</span><span>Emergency Contacts</span></a></li>
+        <li class="nav-item"><a href="sos.html" class="nav-link"><span class="nav-icon">🚨</span><span style="color: var(--danger); font-weight: 700;">SOS Emergency</span></a></li>
+        <li class="nav-item"><a href="caregiver.html" class="nav-link active"><span class="nav-icon">👥</span><span>Caregivers</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon">👤</span><span>My Profile</span></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><span class="nav-icon">⚙️</span><span>Settings</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-quick-profile">
+          <div class="user-avatar current-user-avatar">U</div>
+          <div class="user-info"><div class="user-name current-user-name">User</div><div class="user-email current-user-email">...</div></div>
+          <a href="#" class="logout-btn" title="Sign Out" style="color: var(--danger); font-size: 18px;">🚪</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
+          <div class="topbar-title"><h2>Caregiver Access & Permissions</h2></div>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="openInviteModal()">+ Invite Caregiver</button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Accept Invitation Box (For Caregivers) -->
+        <div class="card" style="margin-bottom: 24px; background: var(--bg-main);">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Have an Invitation Token?</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">If a patient sent you a caregiver token, paste it here to link accounts.</p>
+          <form id="acceptTokenForm" style="display: flex; gap: 10px; max-width: 500px;">
+            <input type="text" id="acceptTokenInput" class="form-control" placeholder="Paste 32-character token here..." required>
+            <button type="submit" id="acceptTokenBtn" class="btn btn-primary btn-sm" style="white-space: nowrap;">Accept & Connect</button>
+          </form>
+        </div>
+
+        <!-- Connected Caregivers List -->
+        <div class="card">
+          <div class="section-header">
+            <h3>Connected Caregivers & Pending Invites</h3>
+          </div>
+          <div id="caregiversListContainer">
+            <div class="empty-state">
+              <div class="spinner spinner-primary"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Invite Caregiver Modal -->
+  <div id="inviteModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Invite Caregiver</h3>
+        <button class="modal-close" onclick="closeInviteModal()">&times;</button>
+      </div>
+      <form id="caregiverInviteForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Caregiver Email Address <span class="required">*</span></label>
+            <input type="email" id="inviteEmail" class="form-control" placeholder="e.g. nurse.mary@example.com" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Caregiver Name</label>
+              <input type="text" id="inviteName" class="form-control" placeholder="e.g. Mary Sharma">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Relationship</label>
+              <input type="text" id="inviteRelation" class="form-control" placeholder="e.g. Daughter / Nurse">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Granular Access Permissions:</label>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Choose specifically what this caregiver can view in your account:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="permMed" checked> Allow viewing Active Medications & Dosage Logs
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="permAppt" checked> Allow viewing Doctor Appointments
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="permWater" checked> Allow viewing Daily Hydration Progress
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="permEmerg" checked> Allow viewing Emergency Contact Information
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; color: var(--danger);">
+                <input type="checkbox" id="permRec"> Allow viewing Medical Records (Disabled by default for privacy)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeInviteModal()">Cancel</button>
+          <button type="submit" id="submitInviteBtn" class="btn btn-primary">Generate Invitation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/caregiver.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create an Account – MediSafe Healthcare</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">⚕️</span>
+        <span>MediSafe</span>
+      </a>
+      <div class="nav-actions">
+        <span style="font-size: 14px; color: var(--text-muted);">Already registered?</span>
+        <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Create Account</h2>
+        <p>Register to manage medications, appointments & health records</p>
+      </div>
+
+      <!-- Alert Message Box -->
+      <div id="registerAlert" class="form-alert"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="regName">Full Name <span class="required">*</span></label>
+          <input type="text" id="regName" class="form-control" placeholder="e.g. Jane Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="regEmail" class="form-control" placeholder="e.g. jane@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regPhone">Phone Number <span class="required">*</span></label>
+          <input type="tel" id="regPhone" class="form-control" placeholder="e.g. +91 9876543210" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Password <span class="required">*</span></label>
+            <input type="password" id="regPassword" class="form-control" placeholder="Min. 6 characters" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regConfirmPassword">Confirm Password <span class="required">*</span></label>
+            <input type="password" id="regConfirmPassword" class="form-control" placeholder="Repeat password" required>
+          </div>
+        </div>
+
+        <button type="submit" id="regSubmitBtn" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+          Create My Account
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Sign In here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect to dashboard
+      redirectIfAuthenticated();
+
+      const form = document.getElementById('registerForm');
+      const alertBox = document.getElementById('registerAlert');
+      const submitBtn = document.getElementById('regSubmitBtn');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.style.display = 'none';
+        alertBox.className = 'form-alert';
+
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirm_password = document.getElementById('regConfirmPassword').value;
+
+        // Front-end validation
+        if (!name || !email || !phone || !password || !confirm_password) {
+          showAlert('Please fill all required fields.', 'error');
+          return;
+        }
+
+        if (password.length < 6) {
+          showAlert('Password must be at least 6 characters long.', 'error');
+          return;
+        }
+
+        if (password !== confirm_password) {
+          showAlert('Passwords do not match.', 'error');
+          return;
+        }
+
+        setButtonLoading(submitBtn, true, 'Create My Account');
+
+        const res = await apiFetch('/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({ name, email, phone, password, confirm_password })
+        });
+
+        setButtonLoading(submitBtn, false, 'Create My Account');
+
+        if (res.success) {
+          setToken(res.token);
+          setUser(res.user);
+          showAlert('Registration successful! Redirecting to dashboard...', 'success');
+          showToast('Welcome to MediSafe!', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
+        } else {
+          showAlert(res.message || 'Registration failed. Please try again.', 'error');
+        }
+      });
+
+      function showAlert(msg, type) {
+        alertBox.textContent = msg;
+        alertBox.className = `form-alert alert-${type}`;
+        alertBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

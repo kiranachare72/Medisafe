@@ -1,0 +1,1 @@
+# MediSafe Django Configuration Package
