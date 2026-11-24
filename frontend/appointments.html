@@ -49,9 +49,33 @@
       </header>
 
       <main class="dashboard-content">
-        <div id="appointmentsListContainer">
+        <div id="appointmentsListContainer" style="margin-bottom: 30px;">
           <div class="empty-state">
             <div class="spinner spinner-primary"></div>
+          </div>
+        </div>
+
+        <!-- Nearby Hospitals & Clinics Section -->
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 style="color: var(--primary); font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                <span>🏥</span> Nearby Hospitals & Medical Centers
+              </h3>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+                Locate verified emergency hospitals, doctors, and clinics with direct navigation and phone contact.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button id="findNearbyBtn" class="btn btn-outline btn-sm" onclick="fetchNearbyHospitals(true)">📍 Refresh with GPS</button>
+              <a id="allHospitalsMapLink" href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">🗺️ Open in Google Maps</a>
+            </div>
+          </div>
+          <div id="nearbyHospitalsContainer">
+            <div class="empty-state" style="padding: 24px;">
+              <div class="spinner spinner-primary"></div>
+              <p style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">Finding closest medical centers...</p>
+            </div>
           </div>
         </div>
       </main>

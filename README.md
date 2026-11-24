@@ -283,20 +283,46 @@ Open your browser at: [http://127.0.0.1:5500/](http://127.0.0.1:5500/)
 
 ## 7. Testing & Verification
 
-An automated verification test script is provided in `test_phase1.py`.
+Automated test suites are provided:
+1. `test_phase1.py`: Tests MongoDB Atlas, Authentication, Profile, and Dashboard aggregation.
+2. `test_all_features.py`: Full-stack test covering all 8 domain modules (Medicines, Appointments, Water, Records, Prescriptions OCR, BMI Health Check, Emergency, Caregivers).
+3. `test_new_changes.py`: Dedicated verification for the 6 advanced features requested by the researcher:
+   - AI Medicine Photo Scan & Safety Quality Predictor (`/api/medicines/ai-scan`)
+   - Real-time Audio Siren Alarm for Scheduled Dose Reminders
+   - Doctor Appointment Email Confirmation Dispatch (`django.core.mail.send_mail`)
+   - Nearby Emergency Hospitals Location Finder (`/api/appointments/nearby-hospitals`)
+   - Instant 1-Click SOS Broadcast (`/api/emergency/dispatch-alert`) with WhatsApp, SMS, and hospital directions
+   - AI Water Intake Photo Volume Estimation & Auto-Logging (`/api/water/photo-analysis`)
+   - AI Multi-Medicine Comparison & Best Tablet Predictor (`/api/medicines/ai-compare`)
+   - System Status removal from Settings UI
 
-Run the test suite:
+Run the test suites:
 ```bash
-python test_phase1.py
+python test_all_features.py
+python test_new_changes.py
 ```
 
 ### Verification Results:
-- `[Test 1]` MongoDB Atlas Connection via PyMongo: **PASS**
-- `[Test 2]` User Registration (validation, bcrypt hashing, duplicate checks): **PASS**
-- `[Test 3]` User Login (invalid passwords, valid credentials, JWT issuance): **PASS**
-- `[Test 4]` Protected Endpoints (rejection without token, acceptance with valid JWT): **PASS**
-- `[Test 5]` Profile Retrieval & Update (MongoDB Atlas persistence check): **PASS**
-- `[Test 6]` Profile Photo Upload (storage on disk, MongoDB path update): **PASS**
-- `[Test 7]` Dashboard Statistics (real MongoDB aggregation, empty states): **PASS**
+- `test_all_features.py`: **8/8 Modules Verified (100% PASS)**
+- `test_new_changes.py`: **6/6 Advanced Features Verified (100% PASS)**
 
-**Result: 7/7 Tests Passed Successfully.**
+---
+
+## 8. How to Run the Application
+
+### Step 1: Open PowerShell or Terminal
+```bash
+cd "c:\Users\Admin\OneDrive\Pictures\Antigravity\MediSafe_Django"
+```
+
+### Step 2: Start the Django Backend Server
+```bash
+python backend/manage.py runserver 127.0.0.1:8000
+```
+
+### Step 3: Open in Browser
+Open your web browser and go to:
+```text
+http://127.0.0.1:8000/
+```
+The Django server directly serves the full frontend application and connects seamlessly to your MongoDB Atlas cloud database!

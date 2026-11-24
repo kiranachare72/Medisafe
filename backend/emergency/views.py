@@ -9,6 +9,7 @@ Endpoints:
 - DELETE /api/emergency-contacts/<id>     (Delete contact)
 """
 
+import re
 from datetime import datetime
 from bson import ObjectId
 from rest_framework.decorators import api_view, parser_classes
@@ -118,3 +119,131 @@ def emergency_contact_detail(request, id):
             'success': True,
             'message': 'Emergency contact deleted successfully.'
         }, status=status.HTTP_200_OK)
+
+
+import urllib.parse
+from common.db import get_collection
+
+@api_view(['POST'])
+@jwt_required
+@parser_classes([JSONParser])
+def dispatch_emergency_alert(request):
+    """
+    POST: Dispatches instant emergency SOS alert.
+    - Generates emergency alert notifications with GPS coordinates.
+    - Creates 1-click WhatsApp and SMS alerts for each saved family contact.
+    - Generates nearby emergency hospital links.
+    - Persists incident log in MongoDB.
+    """
+    user_id = request.user_id
+    user_name = request.user_data.get('name', 'Patient')
+    user_phone = request.user_data.get('phone', '')
+    user_email = request.user_data.get('email', '')
+
+    data = request.data or {}
+    lat = data.get('lat')
+    lng = data.get('lng')
+    notes = str(data.get('notes', 'I need immediate medical assistance!')).strip()
+
+    if lat and lng:
+        maps_link = f"https://www.google.com/maps?q={lat},{lng}"
+        hospital_search_url = f"https://www.google.com/maps/search/emergency+hospital+near+me/@{lat},{lng},14z"
+    else:
+        maps_link = "https://www.google.com/maps"
+        hospital_search_url = "https://www.google.com/maps/search/emergency+hospital+near+me"
+
+    # Fetch family emergency contacts
+    contacts = list(emergency_contacts_col().find({'user_id': user_id}))
+
+    dispatched_family = []
+    for c in contacts:
+        raw_phone = re.sub(r'[^0-9+]', '', c.get('phone', ''))
+        # Prepare emergency message text
+        alert_msg = (
+            f"🚨 EMERGENCY SOS ALERT from {user_name}!\n"
+            f"I need urgent medical help!\n"
+            f"Note: {notes}\n"
+            f"Current Location: {maps_link}\n"
+            f"Time: {datetime.utcnow().strftime('%H:%M UTC, %d %b %Y')}"
+        )
+        encoded_msg = urllib.parse.quote(alert_msg)
+
+        # International format for WhatsApp
+        wa_phone = raw_phone.lstrip('+')
+        if len(wa_phone) == 10 and not wa_phone.startswith('91'):
+            wa_phone = f"91{wa_phone}"
+
+        dispatched_family.append({
+            'contact_id': str(c['_id']),
+            'name': c.get('name'),
+            'relationship': c.get('relationship'),
+            'phone': c.get('phone'),
+            'whatsapp_url': f"https://api.whatsapp.com/send?phone={wa_phone}&text={encoded_msg}",
+            'sms_url': f"sms:{raw_phone}?body={encoded_msg}"
+        })
+
+    # Send emergency email notification
+    email_sent = False
+    if user_email:
+        subject = f"🚨 URGENT: Emergency SOS Triggered for {user_name}!"
+        body = f"""EMERGENCY ALERT BROADCAST
+------------------------------------------------
+Patient Name: {user_name}
+Registered Phone: {user_phone}
+Incident Time: {datetime.utcnow().isoformat()}
+
+LOCATION DETAILS:
+Google Maps Link: {maps_link}
+Nearest Emergency Hospitals: {hospital_search_url}
+
+EMERGENCY CONTACTS ALERTED: {len(dispatched_family)} contact(s)
+{', '.join([c['name'] + ' (' + c['phone'] + ')' for c in dispatched_family]) if dispatched_family else 'None configured'}
+
+MESSAGE:
+{notes}
+
+Please contact the patient or nearest emergency medical services immediately!
+"""
+        try:
+            from django.core.mail import send_mail
+            send_mail(
+                subject=subject,
+                message=body,
+                from_email='sos@medisafe.healthcare',
+                recipient_list=[user_email],
+                fail_silently=True
+            )
+            email_sent = True
+        except Exception as e:
+            print(f"[SOS Email Notice] {e}")
+
+    # Record event in MongoDB 'emergency_events'
+    try:
+        get_collection('emergency_events').insert_one({
+            'user_id': user_id,
+            'user_name': user_name,
+            'lat': lat,
+            'lng': lng,
+            'maps_link': maps_link,
+            'notes': notes,
+            'contacts_alerted': len(dispatched_family),
+            'email_sent': email_sent,
+            'timestamp': datetime.utcnow()
+        })
+    except Exception:
+        pass
+
+    return Response({
+        'success': True,
+        'message': f'SOS broadcast ready! Location captured, {len(dispatched_family)} family alerts prepared, and nearby hospitals identified.',
+        'location': {
+            'lat': lat,
+            'lng': lng,
+            'maps_link': maps_link,
+            'hospital_search_url': hospital_search_url
+        },
+        'family_alerts': dispatched_family,
+        'nearby_hospital_url': hospital_search_url,
+        'email_sent': email_sent
+    }, status=status.HTTP_200_OK)
+

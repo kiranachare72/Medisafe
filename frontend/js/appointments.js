@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   requireAuth();
 
   await loadAppointments();
+  fetchNearbyHospitals(false);
 
   const form = document.getElementById('appointmentForm');
   if (form) {
@@ -161,11 +162,120 @@ async function handleSaveAppointment(e) {
   setButtonLoading(btn, false, 'Confirm Appointment');
 
   if (res.success) {
-    showToast(editingApptId ? 'Appointment updated!' : 'Appointment scheduled successfully!', 'success');
+    if (editingApptId) {
+      showToast('Appointment updated successfully!', 'success');
+    } else {
+      const emailNote = res.email_notification?.sent
+        ? ` 📧 Confirmation email sent to ${res.email_notification.recipient || 'your registered email'}.`
+        : ' 📧 Confirmation email generated.';
+      showToast('Appointment booked successfully!' + emailNote, 'success');
+    }
     closeAppointmentModal();
     await loadAppointments();
   } else {
     showToast(res.message || 'Failed to save appointment.', 'error');
+  }
+}
+
+async function fetchNearbyHospitals(useGps = false) {
+  const container = document.getElementById('nearbyHospitalsContainer');
+  const btn = document.getElementById('findNearbyBtn');
+
+  if (useGps && navigator.geolocation) {
+    if (btn) btn.textContent = '📍 Getting GPS...';
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        if (btn) btn.textContent = '📍 Refresh with GPS';
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        await loadHospitalData(lat, lng);
+      },
+      async (err) => {
+        if (btn) btn.textContent = '📍 Refresh with GPS';
+        showToast('GPS unavailable. Using default city hospital index.', 'warning');
+        await loadHospitalData();
+      },
+      { timeout: 7000 }
+    );
+  } else {
+    await loadHospitalData();
+  }
+}
+
+async function loadHospitalData(lat = null, lng = null) {
+  const container = document.getElementById('nearbyHospitalsContainer');
+  if (container) {
+    container.innerHTML = `
+      <div class="empty-state" style="padding: 20px;">
+        <div class="spinner spinner-primary"></div>
+        <p style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">Finding closest medical centers...</p>
+      </div>
+    `;
+  }
+
+  let endpoint = '/appointments/nearby-hospitals';
+  if (lat && lng) {
+    endpoint += `?lat=${lat}&lng=${lng}`;
+  }
+
+  const res = await apiFetch(endpoint);
+  if (!res.success) {
+    if (container) {
+      container.innerHTML = `<p style="color: var(--danger); font-size: 14px; text-align: center;">Unable to load nearby hospitals right now.</p>`;
+    }
+    return;
+  }
+
+  const mapLink = document.getElementById('allHospitalsMapLink');
+  if (mapLink && res.google_maps_search_url) {
+    mapLink.href = res.google_maps_search_url;
+  }
+
+  renderNearbyHospitals(res.hospitals || []);
+}
+
+function renderNearbyHospitals(hospitals) {
+  const container = document.getElementById('nearbyHospitalsContainer');
+  if (!container) return;
+
+  if (hospitals.length === 0) {
+    container.innerHTML = `<p style="color: var(--text-muted); font-size: 14px; text-align: center;">No hospitals found nearby.</p>`;
+    return;
+  }
+
+  let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">`;
+  hospitals.forEach(h => {
+    html += `
+      <div class="card" style="border: 1px solid var(--border-color); background: #fafafa; padding: 16px; border-radius: var(--radius-md);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+          <h4 style="color: var(--text-main); font-size: 1.05rem; margin: 0;">${h.name}</h4>
+          ${h.emergency ? `<span class="badge badge-danger" style="font-size: 11px;">24/7 ER</span>` : ''}
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">📍 ${h.address}</p>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 12px;">
+          <span><strong>Distance:</strong> ${h.distance}</span>
+          <span>📞 <a href="tel:${h.phone}" style="color: var(--primary); font-weight: 600;">${h.phone}</a></span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="${h.maps_url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">
+            🗺️ Directions
+          </a>
+          <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="bookAtHospital('${h.name.replace(/'/g, "\\'")}')">
+            📅 Book Here
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+  container.innerHTML = html;
+}
+
+function bookAtHospital(hospitalName) {
+  openAddAppointmentModal();
+  const input = document.getElementById('apptHospital');
+  if (input) {
+    input.value = hospitalName;
   }
 }
 

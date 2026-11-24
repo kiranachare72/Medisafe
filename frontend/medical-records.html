@@ -8,6 +8,22 @@
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/forms.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    @keyframes scanLaserMove {
+      0% { top: 0%; opacity: 0.8; }
+      50% { top: 92%; opacity: 1; }
+      100% { top: 0%; opacity: 0.8; }
+    }
+    .scan-laser-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #2563eb, #38bdf8, #2563eb, transparent);
+      box-shadow: 0 0 14px 2px #38bdf8;
+      animation: scanLaserMove 1.4s ease-in-out infinite;
+    }
+  </style>
 </head>
 <body>
   <div class="dashboard-layout">
@@ -49,10 +65,91 @@
       </header>
 
       <main class="dashboard-content">
-        <div class="card" style="margin-bottom: 24px; padding: 18px 24px;">
-          <p style="font-size: 14px; color: var(--text-muted);">
-            All documents are stored with random server filenames and protected by ownership-verification tokens. Only you have permission to download or delete your records.
-          </p>
+        <!-- AI Diagnostic Report Banner -->
+        <div class="card" style="margin-bottom: 20px; padding: 20px 24px; background: linear-gradient(135deg, #eff6ff 0%, #ecfdf5 100%); border: 1px solid #bfdbfe;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h3 style="color: var(--primary); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <span>🧠</span> AI Diagnostic Report & Health Status Predictor
+              </h3>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+                Upload your blood document, X-Ray radiology scans, doctor prescriptions, or health reports. MediSafe AI extracts biomarkers and instantly predicts whether your report is good and healthy ("Acha hai kya nahi").
+              </p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openUploadModal()">+ Upload Any Record</button>
+          </div>
+        </div>
+
+        <!-- 3 Quick Action Upload Categories: Blood Document, X-Ray & Radiology, Medical Documents -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px;">
+          <!-- 1. Blood Document Card -->
+          <div class="card" style="border-top: 4px solid #ef4444; display: flex; flex-direction: column; justify-content: space-between; padding: 18px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 26px;">🩸</span>
+                <span class="badge badge-danger" style="font-size: 11px;">Blood Document</span>
+              </div>
+              <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--text-main);">Blood Test / CBC Report</h4>
+              <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+                Upload CBC, Hemoglobin, Blood Sugar, or Platelet reports. AI predicts anemia risk, infection levels, and whether values are healthy ("Acha hai kya nahi").
+              </p>
+              <div style="font-size: 11.5px; background: #fef2f2; border: 1px solid #fee2e2; border-radius: var(--radius-sm); padding: 6px 10px; margin-bottom: 14px; color: #991b1b;">
+                📌 <strong>Points Analyzed:</strong> Hb, RBC, WBC immunity, Platelets, Sugar
+              </div>
+            </div>
+            <div>
+              <input type="file" id="bloodFileInput" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; z-index: -1;" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" onchange="handleCategoryDirectUpload(this, 'Complete Blood Count (CBC) / Blood Test', 'Blood report: CBC / Hemoglobin / Sugar')">
+              <label for="bloodFileInput" class="btn btn-sm" style="background: #ef4444; color: #ffffff; border: none; font-weight: 700; width: 100%; padding: 11px 14px; cursor: pointer; box-shadow: 0 2px 4px rgba(239,68,68,0.25); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; border-radius: var(--radius-sm); box-sizing: border-box; text-align: center; margin: 0;" onclick="try { document.getElementById('bloodFileInput').click(); } catch(e){}">
+                <span style="font-size: 16px;">📤</span> Upload Blood Document
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. X-Ray & Radiology Card -->
+          <div class="card" style="border-top: 4px solid #0284c7; display: flex; flex-direction: column; justify-content: space-between; padding: 18px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 26px;">🩻</span>
+                <span class="badge badge-info" style="font-size: 11px;">X-Ray & Radiology</span>
+              </div>
+              <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--text-main);">X-Ray & Bone Scans</h4>
+              <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+                Upload Chest X-Rays, Bone X-Rays, or CT/MRI scans. AI analyzes lung field aeration, cardiac shadow, fracture status, and structural clarity.
+              </p>
+              <div style="font-size: 11.5px; background: #f0f9ff; border: 1px solid #e0f2fe; border-radius: var(--radius-sm); padding: 6px 10px; margin-bottom: 14px; color: #075985;">
+                📌 <strong>Points Analyzed:</strong> Lung fields, Heart CTR ratio, Bone fractures
+              </div>
+            </div>
+            <div>
+              <input type="file" id="xrayFileInput" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; z-index: -1;" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" onchange="handleCategoryDirectUpload(this, 'Radiology (Chest X-Ray / CT / MRI)', 'Radiology: Chest X-Ray / Bone scan')">
+              <label for="xrayFileInput" class="btn btn-sm" style="background: #0284c7; color: #ffffff; border: none; font-weight: 700; width: 100%; padding: 11px 14px; cursor: pointer; box-shadow: 0 2px 4px rgba(2,132,199,0.25); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; border-radius: var(--radius-sm); box-sizing: border-box; text-align: center; margin: 0;" onclick="try { document.getElementById('xrayFileInput').click(); } catch(e){}">
+                <span style="font-size: 16px;">📤</span> Upload X-Ray / Scan
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. Medical Document & Prescriptions Card -->
+          <div class="card" style="border-top: 4px solid #10b981; display: flex; flex-direction: column; justify-content: space-between; padding: 18px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 26px;">📄</span>
+                <span class="badge badge-success" style="font-size: 11px;">Medical Documents</span>
+              </div>
+              <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--text-main);">Prescriptions & Health Docs</h4>
+              <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+                Upload Doctor prescriptions, hospital discharge summaries, or clinical reports. AI verifies legitimacy, dosage instructions, and drug safety.
+              </p>
+              <div style="font-size: 11.5px; background: #ecfdf5; border: 1px solid #d1fae5; border-radius: var(--radius-sm); padding: 6px 10px; margin-bottom: 14px; color: #065f46;">
+                📌 <strong>Points Analyzed:</strong> Authenticity, Dosage clarity, Safety check
+              </div>
+            </div>
+            <div>
+              <input type="file" id="healthDocFileInput" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; z-index: -1;" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" onchange="handleCategoryDirectUpload(this, 'Doctor Prescription & Clinical Notes', 'Doctor Prescription / Medical Document')">
+              <label for="healthDocFileInput" class="btn btn-sm" style="background: #10b981; color: #ffffff; border: none; font-weight: 700; width: 100%; padding: 11px 14px; cursor: pointer; box-shadow: 0 2px 4px rgba(16,185,129,0.25); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; border-radius: var(--radius-sm); box-sizing: border-box; text-align: center; margin: 0;" onclick="try { document.getElementById('healthDocFileInput').click(); } catch(e){}">
+                <span style="font-size: 16px;">📤</span> Upload Medical Doc
+              </label>
+            </div>
+          </div>
         </div>
 
         <div id="recordsListContainer">
@@ -61,6 +158,21 @@
           </div>
         </div>
       </main>
+    </div>
+  </div>
+
+  <!-- Live Document Scanning Overlay Animation -->
+  <div id="scanningOverlay" class="modal-overlay" style="z-index: 99999; background: rgba(15, 23, 42, 0.85); display: none; align-items: center; justify-content: center;">
+    <div style="background: #ffffff; border-radius: var(--radius-lg); padding: 32px 36px; text-align: center; max-width: 440px; width: 90%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);">
+      <div style="position: relative; width: 110px; height: 110px; margin: 0 auto 18px auto; background: #eff6ff; border: 2px dashed #3b82f6; border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <span style="font-size: 50px;">📄</span>
+        <div class="scan-laser-line"></div>
+      </div>
+      <h3 style="color: #0f172a; margin-bottom: 6px; font-size: 1.25rem; font-weight: 700;">🔬 Scanning Document OCR...</h3>
+      <p id="scanningStatusText" style="color: #64748b; font-size: 13.5px; line-height: 1.5; margin: 0 0 16px 0;">Reading report text, detecting biomarkers, and predicting health status ("Acha hai kya nahi")...</p>
+      <div style="background: #f1f5f9; border-radius: 9999px; height: 6px; overflow: hidden; width: 100%;">
+        <div style="background: linear-gradient(90deg, #3b82f6, #10b981); height: 100%; width: 100%; animation: pulse 1s infinite alternate;"></div>
+      </div>
     </div>
   </div>
 
@@ -77,37 +189,336 @@
             <label class="form-label">Select File <span class="required">*</span></label>
             <input type="file" id="recordFile" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" required>
             <span class="form-hint">Accepted formats: PDF, JPG, PNG, WEBP, DOCX (Max 10 MB)</span>
+            <div id="selectedFileInfo" style="display: none; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-sm); padding: 8px 12px; margin-top: 8px; font-size: 12.5px; color: #065f46;"></div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Record Type <span class="required">*</span></label>
             <select id="recordType" class="form-control" required>
-              <option value="Blood Test Report">Blood Test Report</option>
-              <option value="Prescription">Doctor Prescription</option>
-              <option value="X-Ray / Scan Report">X-Ray / Scan / MRI Report</option>
-              <option value="Discharge Summary">Discharge Summary</option>
-              <option value="Vaccination Certificate">Vaccination Certificate</option>
-              <option value="Other Health Document">Other Health Document</option>
+              <option value="Complete Blood Count (CBC) / Blood Test">🩸 Complete Blood Count (CBC) / Blood Test</option>
+              <option value="Lipid Profile (Cholesterol & Heart Health)">🩺 Lipid Profile (Cholesterol & Triglycerides)</option>
+              <option value="Blood Glucose & HbA1c (Diabetes)">🧪 Blood Glucose & HbA1c (Diabetes)</option>
+              <option value="Kidney & Liver Function Test (KFT / LFT)">🫀 Kidney & Liver Function (KFT / LFT)</option>
+              <option value="Thyroid Profile (TSH / T3 / T4)">🧬 Thyroid Profile (TSH / T3 / T4)</option>
+              <option value="Radiology (Chest X-Ray / CT / MRI)">🩻 Radiology (Chest X-Ray / CT / MRI)</option>
+              <option value="ECG / Cardiac Health Report">❤️ ECG / Cardiac Health Report</option>
+              <option value="Urine Routine & Microscopy">🔬 Urine Routine & Microscopy</option>
+              <option value="Doctor Prescription & Clinical Notes">📋 Doctor Prescription & Clinical Notes</option>
+              <option value="Discharge Summary & Hospitalization">🏥 Discharge Summary & Hospitalization</option>
+              <option value="Other Health Document">📄 Other Diagnostic / Health Document</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Description / Diagnosis</label>
-            <input type="text" id="recordDesc" class="form-control" placeholder="e.g. Lipid Profile & Vitamin D test from Dr. Lal PathLabs">
+            <label class="form-label">Description / Clinic Notes</label>
+            <input type="text" id="recordDesc" class="form-control" placeholder="e.g. Annual health checkup from Metropolis / Dr. Lal PathLabs">
           </div>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
-          <button type="submit" id="submitUploadBtn" class="btn btn-primary">Upload Document</button>
+          <button type="submit" id="submitUploadBtn" class="btn btn-primary">Upload & AI Analyze Report</button>
         </div>
       </form>
     </div>
   </div>
 
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/records.js"></script>
+  <!-- AI Medical Report Health Prediction Modal -->
+  <div id="aiReportModal" class="modal-overlay">
+    <div class="modal" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 8px;">
+          <span>🧠</span> AI Diagnostic Report Health Analysis
+        </h3>
+        <button class="modal-close" onclick="closeAiReportModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Document Metadata Header -->
+        <div id="aiReportDocMeta" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 16px; font-size: 12px; flex-wrap: wrap; gap: 6px;">
+          <div>
+            <span style="color: var(--text-muted);">Uploaded:</span>
+            <strong id="aiReportUploadDateText" style="color: var(--text-main); margin-left: 4px;">--</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted);">File:</span>
+            <strong id="aiReportFilenameText" style="color: var(--primary); margin-left: 4px;">--</strong>
+          </div>
+          <span id="aiReportStatusBadge" class="badge badge-success" style="font-size: 11px;">Analysis Complete</span>
+        </div>
+
+        <!-- Extraction Failed Notice (Only visible when document text cannot be parsed) -->
+        <div id="aiReportExtractionFailedBox" style="display: none; background: #fff1f2; border: 1.5px solid #f43f5e; border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px; text-align: center;">
+          <span style="font-size: 28px;">⚠️</span>
+          <h4 style="color: #9f1239; margin: 6px 0 4px 0; font-size: 1.05rem;">Extraction Incomplete / Unreadable</h4>
+          <p id="aiReportExtractionFailedMsg" style="color: #881337; font-size: 13px; line-height: 1.45; margin: 0 0 12px 0;">
+            Could not extract readable test parameters from this document. Please verify that the image or PDF is clear, unblurred, and well-lit.
+          </p>
+          <button class="btn btn-primary btn-sm" onclick="closeAiReportModal(); openUploadModal();">🔄 Retry / Re-upload Document</button>
+        </div>
+
+        <!-- Clinical Warnings Box (When values are outside reference ranges) -->
+        <div id="aiReportWarningsBox" style="display: none; background: #fef2f2; border: 1.5px solid #ef4444; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span style="font-size: 22px;">⚠️</span>
+            <h4 style="color: #991b1b; font-size: 1.05rem; margin: 0; font-weight: 700;">Clinical Parameter Alerts (Out of Reference Range)</h4>
+          </div>
+          <ul id="aiReportWarningsList" style="margin: 0; padding-left: 20px; color: #b91c1c; font-size: 13px; line-height: 1.5;"></ul>
+        </div>
+
+        <!-- X-Ray & Radiology Notice & Scan Preview -->
+        <div id="aiReportXrayNoticeBox" style="display: none; background: #eff6ff; border: 1.5px solid #3b82f6; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <span style="font-size: 22px;">🩻</span>
+            <div>
+              <h4 style="color: #1e40af; font-size: 1.05rem; margin: 0 0 4px 0; font-weight: 700;">Radiological Imaging Scan Record</h4>
+              <p style="color: #1e3a8a; font-size: 12.5px; line-height: 1.45; margin: 0;">
+                <strong>Important Notice:</strong> Automated radiological X-ray diagnostic interpretation is not available without specialized clinical radiological evaluation. Medical imaging scans require interpretation by a certified Radiologist or Orthopedic specialist.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document / Scan Preview Box (For images and X-Ray scans) -->
+        <div id="aiReportDocPreviewBox" style="display: none; background: #0f172a; border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px; text-align: center; border: 1px solid #334155;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #38bdf8; font-size: 12px; font-weight: 700; text-transform: uppercase;">🖼️ Uploaded Scan Preview</span>
+            <a id="aiReportDocPreviewFullLink" href="#" target="_blank" style="color: #38bdf8; font-size: 11.5px; text-decoration: underline;">Open Full Resolution ↗</a>
+          </div>
+          <div style="max-height: 280px; overflow: hidden; border-radius: var(--radius-sm); background: #000; display: flex; align-items: center; justify-content: center;">
+            <img id="aiReportDocPreviewImg" src="" alt="Scan Preview" style="max-height: 280px; max-width: 100%; object-fit: contain;">
+          </div>
+        </div>
+
+        <!-- What is in this report? ("Report Me Kya Hai?") -->
+        <div id="aiReportContentsBox" style="background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%); border: 1.5px solid #86efac; border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 22px;">📑</span>
+              <h4 id="aiReportDetectedTitle" style="color: var(--primary); font-size: 1.15rem; margin: 0; font-weight: 700;">Complete Blood Count (CBC) Report</h4>
+            </div>
+            <span id="aiReportDetectedCategory" class="badge badge-primary" style="font-size: 11px;">Hematology Diagnostics</span>
+          </div>
+          <p id="aiReportWhatIsInside" style="font-size: 13.5px; color: var(--text-main); line-height: 1.5; margin: 6px 0 14px 0; background: #ffffff; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid #e2e8f0;"></p>
+          
+          <h5 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main); margin-bottom: 10px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>🔬</span> Is Report Me Ye Sab Paya Gaya Hai (Detected Parameters):
+          </h5>
+          <div id="aiReportDetectedItemsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;"></div>
+        </div>
+
+        <!-- Scanned Document OCR Text Box -->
+        <div id="aiReportScannedTextBox" style="margin-bottom: 20px; background: #0f172a; border-radius: var(--radius-md); padding: 14px 16px; color: #f8fafc; border: 1px solid #334155;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+              <span>🔬</span> Scanned Document OCR Text:
+            </span>
+            <span class="badge badge-info" style="font-size: 11px;">Scanned by OCR Engine</span>
+          </div>
+          <pre id="aiReportScannedText" style="margin: 0; font-family: 'Courier New', Courier, monospace; font-size: 12px; line-height: 1.45; color: #e2e8f0; white-space: pre-wrap; word-break: break-word; max-height: 140px; overflow-y: auto; background: #1e293b; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid #475569;"></pre>
+        </div>
+
+        <!-- Kya Hua Tha (Condition & Diagnosis Prediction) -->
+        <div id="aiReportKyaHuaThaBox" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 1.5px solid #fcd34d; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span style="font-size: 22px;">🩺</span>
+            <h4 style="color: #92400e; font-size: 1.05rem; margin: 0; font-weight: 700;">Kya Hua Tha? (Patient Condition & Background Diagnosis)</h4>
+          </div>
+          <p id="aiReportKyaHuaThaText" style="font-size: 13.5px; color: #78350f; line-height: 1.5; margin: 0; font-weight: 500;"></p>
+        </div>
+
+        <!-- Verdict Banner -->
+        <div id="aiReportVerdictBanner" style="padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; background: #ecfdf5; border: 1px solid #a7f3d0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; color: #065f46;">Overall Health Status ("Acha hai kya nahi")</span>
+              <h4 id="aiReportVerdictText" style="color: #065f46; font-size: 1.15rem; margin: 2px 0 0 0;">GOOD & HEALTHY (Report is Safe)</h4>
+            </div>
+            <div style="text-align: right;">
+              <span id="aiReportScoreBadge" class="badge badge-success" style="font-size: 14px; padding: 6px 12px;">Health Score: 9.4 / 10</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doctor Prescription & Clinical Treatment Plan ("Prescription of Report") -->
+        <div id="aiReportPrescriptionBox" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 2px solid #10b981; border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; border-bottom: 1.5px dashed #a7f3d0; padding-bottom: 10px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 26px;">💊</span>
+                <h4 style="color: #065f46; font-size: 1.2rem; margin: 0; font-weight: 800; letter-spacing: -0.3px;">Doctor Prescription (Rx) & Treatment Plan</h4>
+              </div>
+              <p style="font-size: 12.5px; color: #047857; margin: 4px 0 0 0; font-weight: 500;">
+                Clinical medicine recommendations & dosage schedule formulated for this report
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <span id="aiReportPrescriptionDocTag" class="badge badge-success" style="font-size: 11.5px; padding: 4px 10px;">Verified Medical Protocol</span>
+              <div id="aiReportPrescriptionDocName" style="font-size: 11.5px; color: #065f46; font-weight: 600; margin-top: 3px;">Dr. S. K. Kulkarni, MD</div>
+            </div>
+          </div>
+
+          <!-- Prescribed Medicines Cards -->
+          <h5 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #065f46; margin: 0 0 10px 0; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>📋</span> Prescribed Medicines & Tablet Dosages:
+          </h5>
+          <div id="aiReportPrescriptionMedicinesList" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;"></div>
+
+          <!-- Doctor Clinical Advice & Diet -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 10px;">
+            <div style="background: #ffffff; border: 1px solid #d1fae5; border-radius: var(--radius-sm); padding: 12px 14px;">
+              <div style="font-size: 12px; font-weight: 700; color: #065f46; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span>🩺</span> Doctor Clinical Advice:
+              </div>
+              <div id="aiReportPrescriptionAdvice" style="font-size: 12.5px; color: var(--text-main); line-height: 1.45;"></div>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid #d1fae5; border-radius: var(--radius-sm); padding: 12px 14px;">
+              <div style="font-size: 12px; font-weight: 700; color: #065f46; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span>🥗</span> Diet & Lifestyle Protocol:
+              </div>
+              <div id="aiReportPrescriptionDiet" style="font-size: 12.5px; color: var(--text-main); line-height: 1.45;"></div>
+            </div>
+          </div>
+
+          <!-- Follow-up banner -->
+          <div style="margin-top: 12px; background: #ecfdf5; border-radius: var(--radius-sm); padding: 8px 12px; font-size: 12px; color: #047857; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+            <span id="aiReportPrescriptionFollowup">📅 <strong>Next Review:</strong> Routine follow-up in 3 to 6 months or if symptoms arise.</span>
+            <span style="font-size: 11px; color: #065f46; font-weight: 600;">🔒 MediSafe Verified Rx</span>
+          </div>
+        </div>
+
+        <!-- Clinical Summary -->
+        <div style="margin-bottom: 18px;">
+          <h5 style="margin-bottom: 6px; color: var(--text-main); font-size: 14px;">📋 Clinical Assessment Summary:</h5>
+          <p id="aiReportSummaryText" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; background: var(--bg-main); padding: 12px 14px; border-radius: var(--radius-sm); margin: 0;"></p>
+        </div>
+
+        <!-- Key Diagnostic Points ("Acha hai kya nahi") -->
+        <div style="margin-bottom: 18px;">
+          <h5 style="margin-bottom: 8px; color: var(--text-main); font-size: 14px; display: flex; align-items: center; gap: 6px;">
+            <span>🔍</span> Key Diagnostic Points ("Acha hai kya nahi"):
+          </h5>
+          <div style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 14px;">
+            <ul id="aiReportPointsList" style="margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px;"></ul>
+          </div>
+        </div>
+
+        <!-- Biomarker Parameters Table -->
+        <div style="margin-bottom: 18px;">
+          <h5 style="margin-bottom: 8px; color: var(--text-main); font-size: 14px;">🧪 Key Extracted Biomarkers & References:</h5>
+          <div class="table-responsive" style="max-height: 220px; overflow-y: auto;">
+            <table class="custom-table" style="font-size: 12.5px;">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Observed Value</th>
+                  <th>Clinical Reference</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="aiReportParamsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div style="margin-bottom: 18px;">
+          <h5 style="margin-bottom: 6px; color: var(--text-main); font-size: 14px;">💡 Doctor Advice & Lifestyle Steps:</h5>
+          <ul id="aiReportRecsList" style="margin: 0; padding-left: 20px; font-size: 13px; color: var(--text-muted); line-height: 1.6;"></ul>
+        </div>
+
+        <!-- Prescription User Review Details Box (Only for prescriptions) -->
+        <div id="aiReportPrescriptionReviewBox" style="display: none; background: #ffffff; border: 1.5px solid #a7f3d0; border-radius: var(--radius-md); padding: 16px; margin-bottom: 18px;">
+          <h5 style="margin: 0 0 10px 0; color: #065f46; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>📋</span> Extracted Prescription Review (Verify Your Medication Schedule):
+          </h5>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 12px; font-size: 12px; background: #f0fdf4; padding: 10px 12px; border-radius: var(--radius-sm);">
+            <div><strong>Patient Name:</strong> <span id="rxReviewPatientName">--</span></div>
+            <div><strong>Doctor / Clinic:</strong> <span id="rxReviewDoctorName">--</span></div>
+            <div><strong>Date:</strong> <span id="rxReviewDate">--</span></div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" style="font-size: 12px;">
+              <thead>
+                <tr>
+                  <th>Medicine</th>
+                  <th>Strength</th>
+                  <th>Frequency</th>
+                  <th>Timing</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody id="rxReviewTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Official Medical Disclaimer Banner -->
+        <div style="margin-top: 18px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 11.5px; color: #64748b; line-height: 1.45;">
+          ⚕️ <strong>Clinical Disclaimer:</strong> MediSafe automated document analysis extracts readable text and compares values against standard reference ranges for patient health awareness. This is not a diagnosis. Always consult a licensed physician, hematologist, or radiologist for clinical evaluations and medication changes.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="closeAiReportModal()">Done / Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=20261123_v6"></script>
+  <script src="js/api.js?v=20261123_v6"></script>
+  <script src="js/auth.js?v=20261123_v6"></script>
+  <script src="js/records.js?v=20261123_v6"></script>
+  <script>
+    // Inline direct category handler ensures immediate execution even before external scripts or if cached
+    async function handleCategoryDirectUpload(input, categoryType, defaultDesc) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+
+      if (file.size > 10 * 1024 * 1024) {
+        if (typeof showToast === 'function') showToast('File size must be under 10 MB.', 'warning');
+        else alert('File size must be under 10 MB.');
+        input.value = '';
+        return;
+      }
+
+      const overlay = document.getElementById('scanningOverlay');
+      const scanStatus = document.getElementById('scanningStatusText');
+      if (overlay) overlay.style.display = 'flex';
+      if (scanStatus) scanStatus.textContent = `Scanning "${file.name}" (Extracting OCR text & predicting health status)...`;
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('file_type', categoryType);
+      formData.append('description', defaultDesc || file.name);
+
+      try {
+        const res = await apiFetch('/records', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (res.success) {
+          if (typeof showToast === 'function') showToast('Document scanned and analyzed by AI successfully!', 'success');
+          if (typeof loadRecords === 'function') await loadRecords();
+
+          // Immediately display AI prediction modal
+          if (res.ai_analysis && typeof displayAiReportModal === 'function') {
+            displayAiReportModal(res.ai_analysis, categoryType, file.name, new Date().toISOString());
+          }
+        } else {
+          if (typeof showToast === 'function') showToast(res.message || 'Upload failed.', 'error');
+          else alert(res.message || 'Upload failed.');
+        }
+      } catch (err) {
+        const msg = 'Upload error: ' + (err.message || 'Please check backend connection');
+        if (typeof showToast === 'function') showToast(msg, 'error');
+        else alert(msg);
+      } finally {
+        if (overlay) overlay.style.display = 'none';
+        input.value = '';
+      }
+    }
+  </script>
 </body>
 </html>

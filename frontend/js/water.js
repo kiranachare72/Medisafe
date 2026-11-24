@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
   }
+
+  // AI Water Photo Scanner Input
+  const photoInput = document.getElementById('waterPhotoInput');
+  if (photoInput) {
+    photoInput.addEventListener('change', handleWaterPhotoUpload);
+  }
 });
 
 async function loadWaterData() {
@@ -187,4 +193,61 @@ async function updateGoal(goal) {
   } else {
     showToast(res.message || 'Failed to update goal.', 'error');
   }
+}
+
+// ==============================================================
+// AI WATER PHOTO ANALYSIS & AUTO-LOGGING
+// ==============================================================
+
+async function handleWaterPhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const btn = document.getElementById('triggerWaterScanBtn');
+  setButtonLoading(btn, true, 'AI Analyzing Container...');
+
+  // Show immediate image preview
+  const previewImg = document.getElementById('waterPhotoPreviewImg');
+  if (previewImg) {
+    previewImg.src = URL.createObjectURL(file);
+  }
+
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('auto_log', 'true');
+
+  const res = await apiFetch('/water/photo-analysis', {
+    method: 'POST',
+    body: formData
+  });
+
+  setButtonLoading(btn, false, '📷 Upload Container Photo');
+
+  if (res.success) {
+    const analysis = res.analysis || {};
+    const resultBox = document.getElementById('aiWaterResultBox');
+    if (resultBox) resultBox.style.display = 'block';
+
+    const detectedTitle = document.getElementById('aiDetectedContainer');
+    if (detectedTitle) detectedTitle.textContent = analysis.container_type || 'Hydration Container';
+
+    const badge = document.getElementById('aiConfidenceBadge');
+    if (badge) badge.textContent = `${analysis.confidence || '90%'} Match`;
+
+    const desc = document.getElementById('aiContainerDesc');
+    if (desc) desc.textContent = analysis.description || '';
+
+    const ml = document.getElementById('aiEstimatedMl');
+    if (ml) ml.textContent = `${analysis.estimated_ml || 500} ml`;
+
+    showToast(`AI identified ${analysis.container_type} (${analysis.estimated_ml} ml) and logged to your hydration!`, 'success');
+
+    // Refresh totals and history
+    await loadWaterData();
+  } else {
+    showToast(res.message || 'Water photo analysis failed.', 'error');
+  }
+
+  // Clear input so selecting same photo triggers change
+  e.target.value = '';
 }

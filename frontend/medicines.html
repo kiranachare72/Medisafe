@@ -43,16 +43,36 @@
           <button id="mobileMenuToggle" class="mobile-menu-btn">&#9776;</button>
           <div class="topbar-title"><h2>Medication Management</h2></div>
         </div>
-        <div class="topbar-right">
+        <div class="topbar-right" style="gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-outline btn-sm" onclick="testSirenAlarmDemo()" style="color: var(--danger); border-color: var(--danger);">🚨 Test Siren Alarm</button>
+          <button class="btn btn-secondary btn-sm" onclick="openAiScanModal()">📸 Scan & AI Check Medicine</button>
           <button class="btn btn-primary btn-sm" onclick="openAddMedicineModal()">+ Add Medicine</button>
         </div>
       </header>
 
       <main class="dashboard-content">
-        <!-- Top Toolbar -->
+        <!-- AI Features Banner -->
+        <div class="card" style="margin-bottom: 20px; background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border: 1px solid #bae6fd; padding: 18px 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h3 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 4px;">🤖 AI Clinical Medicine Advisor & Quality Predictor</h3>
+              <p style="font-size: 13px; color: var(--text-muted);">
+                Scan any medicine strip to predict if it is good and safe, or compare multiple tablets to predict which medicine is best suited for your symptoms.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-secondary btn-sm" onclick="openAiScanModal()">📸 Scan Strip / Bottle</button>
+              <button class="btn btn-outline btn-sm" onclick="openAiCompareModal()" style="background: #fff;">⚡ Compare & Predict Best Tablet</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Search Toolbar -->
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
           <input type="text" id="searchMedInput" class="form-control" placeholder="🔍 Search medicines by name or instructions..." style="max-width: 380px;">
-          <a href="medicine-history.html" class="btn btn-outline btn-sm">📜 View Intake Compliance History</a>
+          <div style="display: flex; gap: 10px;">
+            <a href="medicine-history.html" class="btn btn-outline btn-sm">📜 Intake History</a>
+          </div>
         </div>
 
         <!-- Medicines Table Card -->
@@ -67,7 +87,7 @@
     </div>
   </div>
 
-  <!-- Add / Edit Medicine Modal -->
+  <!-- 1. Add / Edit Medicine Modal -->
   <div id="medicineModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
@@ -78,7 +98,38 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Medicine Name <span class="required">*</span></label>
-            <input type="text" id="medName" class="form-control" placeholder="e.g. Paracetamol / Dolo 650" required>
+            <input type="text" id="medName" list="popularTabletsList" class="form-control" placeholder="e.g. Paracetamol, Dolo 650, Meftal-Spas, Pan 40, Augmentin" required>
+            <datalist id="popularTabletsList">
+              <option value="Dolo 650 (Paracetamol 650mg)">
+              <option value="Crocin 650 (Paracetamol)">
+              <option value="Calpol 500 (Paracetamol)">
+              <option value="Meftal-Spas (Abdominal Cramps)">
+              <option value="Combiflam (Ibuprofen + Paracetamol)">
+              <option value="Brufen 400 (Ibuprofen)">
+              <option value="Voveran 50 (Diclofenac)">
+              <option value="Pan 40 (Pantoprazole)">
+              <option value="Razo 20 (Rabeprazole)">
+              <option value="Omez 20 (Omeprazole)">
+              <option value="Emeset 4mg (Ondansetron - Anti-Emetic)">
+              <option value="Domstal 10mg (Domperidone)">
+              <option value="Norflox-TZ (Food Poisoning & Diarrhea)">
+              <option value="Imodium 2mg (Loperamide)">
+              <option value="Cetzine 10mg (Cetirizine)">
+              <option value="Levocet 5mg (Levocetirizine)">
+              <option value="Montair-LC (Allergic Cough & Asthma)">
+              <option value="Allegra 120mg (Non-Drowsy Allergy)">
+              <option value="Azee 500mg (Azithromycin)">
+              <option value="Augmentin 625 (Amoxicillin + Clavulanic Acid)">
+              <option value="Ciplox 500mg (Ciprofloxacin)">
+              <option value="Glycomet 500mg (Metformin - Diabetes)">
+              <option value="Telma 40mg (Telmisartan - Blood Pressure)">
+              <option value="Amlong 5mg (Amlodipine - High BP)">
+              <option value="Atorva 10mg (Atorvastatin - Cholesterol)">
+              <option value="Limcee 500mg (Vitamin C Chewable)">
+              <option value="Becosules (B-Complex - Mouth Ulcers)">
+              <option value="Shelcal 500 (Calcium + Vitamin D3)">
+              <option value="Disprin / Ecosprin (Aspirin)">
+            </datalist>
           </div>
 
           <div class="form-row">
@@ -114,7 +165,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Scheduled Time <span class="required">*</span></label>
+              <label class="form-label">Scheduled Time (Siren Alert Alarm) <span class="required">*</span></label>
               <input type="time" id="medTime" class="form-control" value="08:00" required>
             </div>
           </div>
@@ -163,6 +214,167 @@
       </form>
     </div>
   </div>
+
+  <!-- 2. AI Scan Medicine Modal (Quality & Safety: Changle ahe ka nahi) -->
+  <div id="aiScanModal" class="modal-overlay">
+    <div class="modal" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>📸 Scan Medicine & Predict Safety</h3>
+        <button class="modal-close" onclick="closeAiScanModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Take or upload a photo of the medicine strip, tablet packaging, or bottle. AI will predict if it is good & safe ("Changle ahe ka nahi"), identify active ingredients, and advise on precautions.
+        </p>
+
+        <form id="aiMedScanForm" style="margin-bottom: 18px;">
+          <div class="form-group">
+            <label class="form-label">Select Medicine Photo</label>
+            <input type="file" id="aiMedPhotoInput" class="form-control" accept="image/jpeg,image/png,image/webp" required>
+          </div>
+          <button type="submit" id="aiScanSubmitBtn" class="btn btn-secondary" style="width: 100%;">
+            🔍 Scan & AI Predict Quality
+          </button>
+        </form>
+
+        <!-- Result Box -->
+        <div id="aiScanResultBox" style="display: none; background: var(--bg-main); border: 2px solid var(--secondary); border-radius: var(--radius-md); padding: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <div>
+              <h4 id="aiIdentifiedName" style="font-size: 1.2rem; color: var(--primary);"></h4>
+              <span id="aiCategory" style="font-size: 12px; color: var(--text-muted);"></span>
+            </div>
+            <span id="aiSafetyVerdict" class="badge"></span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; font-size: 13px;">
+            <div style="background: #fff; padding: 8px 12px; border-radius: var(--radius-sm);">
+              <strong>Safety Rating:</strong> <span id="aiSafetyScore" style="color: var(--success); font-weight: 700;"></span>
+            </div>
+            <div style="background: #fff; padding: 8px 12px; border-radius: var(--radius-sm);">
+              <strong>Recommended Dose:</strong> <span id="aiDosageAdvice"></span>
+            </div>
+          </div>
+
+          <div style="background: #fff; padding: 10px 12px; border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 13px;">
+            <strong style="color: #92400e;">⚠️ Precautions:</strong> <span id="aiPrecautions"></span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 16px;">
+            <div style="background: #f0fdf4; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid #bbf7d0;">
+              <strong>Benefits / Pros:</strong>
+              <ul id="aiProsList" style="list-style: none; margin-top: 4px; padding: 0;"></ul>
+            </div>
+            <div style="background: #fffbeb; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid #fde68a;">
+              <strong>Cautions / Cons:</strong>
+              <ul id="aiConsList" style="list-style: none; margin-top: 4px; padding: 0;"></ul>
+            </div>
+          </div>
+
+          <button id="addScannedBtn" class="btn btn-primary" style="width: 100%;" onclick="addScannedMedToSchedule()">
+            ✓ 1-Click Add to Daily Schedule
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. AI Predict & Compare Best Medicine Modal (Konti goli changli ahe) -->
+  <div id="aiCompareModal" class="modal-overlay">
+    <div class="modal" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>⚡ AI Medicine Predictor: Which Tablet is Best?</h3>
+        <button class="modal-close" onclick="closeAiCompareModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+          Enter symptoms or compare multiple medicine names (e.g. <em>"fever and severe headache"</em>, <em>"stomach cramps"</em>, or <em>"Dolo 650 vs Crocin vs Combiflam"</em>). AI predicts which medicine is best and safest ("Konti goli changli ahe").
+        </p>
+
+        <!-- Quick Comparison Pills -->
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">⚡ Quick Sample Comparisons (Click to Test):</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Dolo 650 vs Crocin vs Combiflam for fever')">🌡️ Fever: Dolo vs Crocin vs Combiflam</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Meftal-Spas vs Dolo for severe abdominal cramps')">⚡ Stomach Cramps: Meftal-Spas vs Dolo</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Emeset vs Domstal for nausea and vomiting')">🤢 Vomiting: Emeset vs Domstal</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Pan 40 vs Razo 20 for severe acidity')">🔥 Acidity: Pan 40 vs Razo 20</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Allegra vs Montair-LC vs Cetirizine for allergic cough')">🤧 Allergy: Allegra vs Montair vs Cetzine</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Augmentin 625 vs Azee 500 for throat infection')">🦠 Infection: Augmentin vs Azee 500</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Telma 40 vs Amlong for high blood pressure')">🩺 BP: Telma 40 vs Amlong</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Glycomet 500 vs Amaryl for diabetes blood sugar')">🩸 Diabetes: Glycomet vs Amaryl</button>
+            <button type="button" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 8px;" onclick="setCompareQuery('Becosules vs Limcee for mouth ulcers')">🩹 Mouth Ulcers: Becosules vs Limcee</button>
+          </div>
+        </div>
+
+        <form id="aiCompareForm" style="display: flex; gap: 8px; margin-bottom: 18px;">
+          <input type="text" id="aiCompareQuery" class="form-control" placeholder="e.g. Meftal-Spas vs Dolo for cramps or fever and severe headache" required>
+          <button type="submit" id="aiCompareSubmitBtn" class="btn btn-primary" style="white-space: nowrap;">⚡ Predict Best</button>
+        </form>
+
+        <!-- Prediction Result Card -->
+        <div id="aiCompareResultBox" style="display: none; background: #f8fafc; border: 2px solid var(--primary); border-radius: var(--radius-md); padding: 18px;">
+          <div style="background: #ecfdf5; border: 1px solid #a7f3d0; padding: 14px; border-radius: var(--radius-md); margin-bottom: 14px;">
+            <div style="font-size: 12px; color: #047857; font-weight: 700;">AI PREDICTED BEST MEDICINE:</div>
+            <h3 id="aiBestName" style="color: #065f46; font-size: 1.3rem; margin: 4px 0;"></h3>
+            <p id="aiBestReason" style="font-size: 13px; color: #064e3b;"></p>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <h4 style="font-size: 13px; margin-bottom: 8px;">Comparative Rankings & Evaluation:</h4>
+            <div class="table-responsive">
+              <table class="custom-table" style="font-size: 12px; background: #fff;">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Medicine</th>
+                    <th>Recommendation</th>
+                    <th>Safety Score</th>
+                    <th>Clinical Verdict</th>
+                  </tr>
+                </thead>
+                <tbody id="aiRankingTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="font-size: 12px; color: var(--text-muted); background: #fff; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div><strong>Dosage Guidance:</strong> <span id="aiBestDosage"></span></div>
+            <div><strong>Precautions:</strong> <span id="aiBestPrecautions"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Real-time Audio Siren Alarm Modal -->
+  <div id="sirenAlarmModal" class="modal-overlay">
+    <div class="modal" style="max-width: 440px; border: 3px solid var(--danger); text-align: center;">
+      <div class="modal-body" style="padding: 32px 20px;">
+        <div style="font-size: 54px; animation: pulse 0.6s infinite alternate;">🚨</div>
+        <h2 style="color: var(--danger); font-size: 1.6rem; margin: 12px 0 6px;">MEDICINE TIME REMINDER!</h2>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">Your scheduled medication dose is due right now.</p>
+
+        <div style="background: var(--bg-main); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; border: 1px dashed var(--danger);">
+          <h3 id="sirenMedName" style="color: var(--primary); font-size: 1.3rem; margin-bottom: 4px;"></h3>
+          <p id="sirenMedDosage" style="font-size: 14px; font-weight: 600;"></p>
+          <small id="sirenMedTime" style="color: var(--text-muted); font-size: 13px;"></small>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button id="sirenTakenBtn" class="btn btn-primary" style="flex: 1; padding: 12px;">✓ Mark as Taken</button>
+          <button class="btn btn-danger" style="flex: 1; padding: 12px;" onclick="stopSirenAlarm()">Stop Alarm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.15); }
+    }
+  </style>
 
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
