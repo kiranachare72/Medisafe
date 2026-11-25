@@ -41,7 +41,14 @@ def caregivers_list(request):
     """
     try:
         user_id = str(getattr(request, 'user_id', ''))
-        caregivers = list(caregivers_col().find({'user_id': user_id}).sort('created_at', -1))
+        query_filter = {
+            '$or': [
+                {'user_id': user_id},
+                {'user': user_id},
+                {'user': ObjectId(user_id) if ObjectId.is_valid(user_id) else None}
+            ]
+        }
+        caregivers = list(caregivers_col().find(query_filter).sort('created_at', -1))
 
         return Response({
             'success': True,
@@ -94,11 +101,14 @@ def invite_caregiver(request):
         }
 
         # Check if already connected as accepted caregiver
-        existing_accepted = caregivers_col().find_one({
-            'user_id': user_id,
-            'caregiver_email': email,
-            'status': 'accepted'
-        })
+        query_accepted = {
+            '$and': [
+                {'$or': [{'user_id': user_id}, {'user': user_id}, {'user': ObjectId(user_id) if ObjectId.is_valid(user_id) else None}]},
+                {'$or': [{'caregiver_email': email}, {'caregiverEmail': email}]},
+                {'status': 'accepted'}
+            ]
+        }
+        existing_accepted = caregivers_col().find_one(query_accepted)
         if existing_accepted:
             return Response({
                 'success': False,
@@ -109,11 +119,14 @@ def invite_caregiver(request):
         invite_token = secrets.token_urlsafe(32)
 
         # Check if a pending invite already exists for this email
-        existing_pending = caregivers_col().find_one({
-            'user_id': user_id,
-            'caregiver_email': email,
-            'status': 'pending'
-        })
+        query_pending = {
+            '$and': [
+                {'$or': [{'user_id': user_id}, {'user': user_id}, {'user': ObjectId(user_id) if ObjectId.is_valid(user_id) else None}]},
+                {'$or': [{'caregiver_email': email}, {'caregiverEmail': email}]},
+                {'status': 'pending'}
+            ]
+        }
+        existing_pending = caregivers_col().find_one(query_pending)
         if existing_pending:
             caregivers_col().update_one(
                 {'_id': existing_pending['_id']},
@@ -135,10 +148,12 @@ def invite_caregiver(request):
 
         new_invite = {
             'user_id': user_id,
+            'user': ObjectId(user_id) if ObjectId.is_valid(user_id) else user_id,
             'patient_name': patient_name,
             'patient_email': patient_email,
             'caregiver_name': name or email.split('@')[0],
             'caregiver_email': email,
+            'caregiverEmail': email,
             'relationship': relationship,
             'invitation_token': invite_token,
             'permissions': permissions,
@@ -146,6 +161,14 @@ def invite_caregiver(request):
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow()
         }
+
+        # Safe drop in case legacy index was present on this collection
+        try:
+            indexes = caregivers_col().index_information()
+            if 'user_1_caregiverEmail_1' in indexes:
+                caregivers_col().drop_index('user_1_caregiverEmail_1')
+        except Exception:
+            pass
 
         res = caregivers_col().insert_one(new_invite)
         new_invite['_id'] = res.inserted_id
@@ -211,6 +234,7 @@ def accept_caregiver_invitation(request):
             {'_id': invite['_id']},
             {'$set': {
                 'caregiver_user_id': caregiver_user_id,
+                'caregiver': ObjectId(caregiver_user_id) if ObjectId.is_valid(caregiver_user_id) else caregiver_user_id,
                 'status': 'accepted',
                 'accepted_at': datetime.utcnow(),
                 'updated_at': datetime.utcnow()
@@ -242,7 +266,15 @@ def revoke_caregiver(request, id):
         except Exception:
             return Response({'success': False, 'message': 'Invalid caregiver ID.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        res = caregivers_col().delete_one({'_id': c_id, 'user_id': user_id})
+        query_filter = {
+            '_id': c_id,
+            '$or': [
+                {'user_id': user_id},
+                {'user': user_id},
+                {'user': ObjectId(user_id) if ObjectId.is_valid(user_id) else None}
+            ]
+        }
+        res = caregivers_col().delete_one(query_filter)
         if res.deleted_count == 0:
             return Response({'success': False, 'message': 'Caregiver record not found.'}, status=status.HTTP_404_NOT_FOUND)
 

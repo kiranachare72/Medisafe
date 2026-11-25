@@ -100,6 +100,13 @@ def init_db_indexes(db):
         db['prescriptions'].create_index([('user_id', ASCENDING), ('created_at', DESCENDING)])
 
         # Caregivers
+        try:
+            caregiver_indexes = db['caregivers'].index_information()
+            if 'user_1_caregiverEmail_1' in caregiver_indexes:
+                db['caregivers'].drop_index('user_1_caregiverEmail_1')
+        except Exception:
+            pass
+
         db['caregivers'].create_index([('user_id', ASCENDING)])
         db['caregivers'].create_index([('invitation_token', ASCENDING)], sparse=True)
         db['caregivers'].create_index([('caregiver_email', ASCENDING)])
