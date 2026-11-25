@@ -45,7 +45,7 @@
         </div>
         <div class="topbar-right" style="gap: 8px; flex-wrap: wrap;">
           <button class="btn btn-outline btn-sm" onclick="testSirenAlarmDemo()" style="color: var(--danger); border-color: var(--danger);">🚨 Test Siren Alarm</button>
-          <button class="btn btn-secondary btn-sm" onclick="openAiScanModal()">📸 Scan & AI Check Medicine</button>
+          <button class="btn btn-secondary btn-sm" onclick="openAiScanModal()">📤 Upload Medicine</button>
           <button class="btn btn-primary btn-sm" onclick="openAddMedicineModal()">+ Add Medicine</button>
         </div>
       </header>
@@ -57,11 +57,11 @@
             <div>
               <h3 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 4px;">🤖 AI Clinical Medicine Advisor & Quality Predictor</h3>
               <p style="font-size: 13px; color: var(--text-muted);">
-                Scan any medicine strip to predict if it is good and safe, or compare multiple tablets to predict which medicine is best suited for your symptoms.
+                Upload any medicine strip or photo to predict if it is good and safe, or compare multiple tablets to predict which medicine is best suited for your symptoms.
               </p>
             </div>
             <div style="display: flex; gap: 10px;">
-              <button class="btn btn-secondary btn-sm" onclick="openAiScanModal()">📸 Scan Strip / Bottle</button>
+              <button class="btn btn-secondary btn-sm" onclick="openAiScanModal()">📤 Upload</button>
               <button class="btn btn-outline btn-sm" onclick="openAiCompareModal()" style="background: #fff;">⚡ Compare & Predict Best Tablet</button>
             </div>
           </div>
@@ -219,7 +219,7 @@
   <div id="aiScanModal" class="modal-overlay">
     <div class="modal" style="max-width: 620px;">
       <div class="modal-header">
-        <h3>📸 Scan Medicine & Predict Safety</h3>
+        <h3>📤 Upload Medicine & Predict Safety</h3>
         <button class="modal-close" onclick="closeAiScanModal()">&times;</button>
       </div>
       <div class="modal-body">
@@ -233,7 +233,7 @@
             <input type="file" id="aiMedPhotoInput" class="form-control" accept="image/jpeg,image/png,image/webp" required>
           </div>
           <button type="submit" id="aiScanSubmitBtn" class="btn btn-secondary" style="width: 100%;">
-            🔍 Scan & AI Predict Quality
+            🔍 Upload & AI Predict Quality
           </button>
         </form>
 

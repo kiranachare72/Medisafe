@@ -375,7 +375,7 @@ async function handleAiScanMedicine(e) {
     body: formData
   });
 
-  setButtonLoading(btn, false, '🔍 Scan & AI Predict Quality');
+  setButtonLoading(btn, false, '🔍 Upload & AI Predict Quality');
 
   if (res.success) {
     showToast('AI analysis completed!', 'success');

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from caregivers.views import (
     caregivers_list,
     invite_caregiver,
@@ -8,9 +8,9 @@ from caregivers.views import (
 )
 
 urlpatterns = [
-    path('caregivers', caregivers_list, name='caregivers-list'),
-    path('caregivers/invite', invite_caregiver, name='caregiver-invite'),
-    path('caregivers/accept', accept_caregiver_invitation, name='caregiver-accept'),
-    path('caregivers/<str:id>', revoke_caregiver, name='caregiver-revoke'),
-    path('caregivers/patient/<str:id>', caregiver_patient_view, name='caregiver-patient-view'),
+    re_path(r'^caregivers/?$', caregivers_list, name='caregivers-list'),
+    re_path(r'^caregivers/invite/?$', invite_caregiver, name='caregiver-invite'),
+    re_path(r'^caregivers/accept/?$', accept_caregiver_invitation, name='caregiver-accept'),
+    re_path(r'^caregivers/(?P<id>[a-f0-9]{24})/?$', revoke_caregiver, name='caregiver-revoke'),
+    re_path(r'^caregivers/patient/(?P<id>[a-f0-9]{24})/?$', caregiver_patient_view, name='caregiver-patient-view'),
 ]
